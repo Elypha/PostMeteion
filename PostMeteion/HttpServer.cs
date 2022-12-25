@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 using Dalamud.Logging;
 namespace PostMeteion
 {
-   
+
     public class HttpServer
     {
         private Thread _serverThread;
         private HttpListener _listener;
         public bool IsRunning { get; private set; }
         public int Port { get; private set; }
-        public Func<string, string,string> PostMeteionDelegate = null;
+        public Func<string, string, string> PostMeteionDelegate = null;
         public event OnExceptionEventHandler OnException;
         public delegate void OnExceptionEventHandler(Exception ex);
 
@@ -61,12 +61,14 @@ namespace PostMeteion
                 return;
             }
 
-            ThreadPool.QueueUserWorkItem(o => {
+            ThreadPool.QueueUserWorkItem(o =>
+            {
                 try
                 {
-                    IsRunning=true;
+                    IsRunning = true;
                     while (_listener.IsListening)
-                        ThreadPool.QueueUserWorkItem(c => {
+                        ThreadPool.QueueUserWorkItem(c =>
+                        {
                             if (!(c is HttpListenerContext context))
                                 throw new ArgumentNullException(nameof(context));
                             try

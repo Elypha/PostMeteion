@@ -106,25 +106,29 @@ namespace PostMeteion
                 ImGui.SameLine();
                 //getstatus
                 bool serverState = false;
-                if (this.plugin.httpServer is not null) {
-                    serverState= this.plugin.httpServer.IsRunning;
+                if (this.plugin.httpServer is not null)
+                {
+                    serverState = this.plugin.httpServer.IsRunning;
                 }
-                ImGui.TextColored(serverState ? fineColor : errorColor, serverState ? "Running":"Halting");
+                ImGui.TextColored(serverState ? fineColor : errorColor, serverState ? "Running" : "Halting");
                 ImGui.SameLine();
                 if (serverState)
                 {
-                    if (ImGui.Button("Restart Server")) {
+                    if (ImGui.Button("Restart Server"))
+                    {
                         this.plugin.ServerStop();
                         this.plugin.ServerStart(apiServerPort);
                     };
                     ImGui.SameLine();
-                    if (ImGui.Button("Stop Server")){
+                    if (ImGui.Button("Stop Server"))
+                    {
                         this.plugin.ServerStop();
                     };
                 }
                 else
                 {
-                    if (ImGui.Button("Start Server")) {
+                    if (ImGui.Button("Start Server"))
+                    {
                         this.plugin.ServerStart(apiServerPort);
                     }
                 }
@@ -139,7 +143,7 @@ namespace PostMeteion
                 var reportAddr = this.plugin.Config.WebhookServer;
                 if (ImGui.InputText("ReportAddress", ref reportAddr, 100))
                 {
-                    this.plugin.Config.WebhookServer=reportAddr;
+                    this.plugin.Config.WebhookServer = reportAddr;
                 }
                 ImGui.Text("WebhookConnection: ");
                 ImGui.SameLine();
@@ -149,8 +153,8 @@ namespace PostMeteion
                 if (ImGui.Button("TryConnect"))
                 {
                     this.plugin.Config.Save();
-                    this.plugin.Webhook.reportAddr=this.plugin.Config.WebhookServer;
-                    _=this.plugin.Webhook.Connect();
+                    this.plugin.Webhook.reportAddr = this.plugin.Config.WebhookServer;
+                    _ = this.plugin.Webhook.Connect();
                 }
                 ImGui.Text("WebhookDelegate: ");
                 ImGui.SameLine();
@@ -187,7 +191,7 @@ namespace PostMeteion
             if (ImGui.Begin("Anagnorisis - TestingLab", ref this.testingVisible,
                 ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
             {
-                
+
                 if (ImGui.InputText("TestCommand", ref this.test_command, 100))
                 {
                     this.plugin.Config.Save();
@@ -197,7 +201,8 @@ namespace PostMeteion
                     PluginLog.Information(test_command);
                     this.plugin.DoTextCommand(test_command);
                 }
-                if (ImGui.InputText("TestWaymark", ref this.test_waymark, 400)) { 
+                if (ImGui.InputText("TestWaymark", ref this.test_waymark, 400))
+                {
                 }
                 if (ImGui.Button("ShowWaymark"))
                 {

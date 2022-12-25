@@ -64,7 +64,7 @@ namespace PostMeteion
                 case "cp":
                     return $"{Svc.ClientState.LocalPlayer?.CurrentCp}/{Svc.ClientState.LocalPlayer?.MaxCp}";
                 case "buff":
-                    return $"{String.Join("|",(from Status in (Svc.ClientState.LocalPlayer?.StatusList) select Status.GameData.Name.RawString).ToArray())}";
+                    return $"{String.Join("|", (from Status in (Svc.ClientState.LocalPlayer?.StatusList) select Status.GameData.Name.RawString).ToArray())}";
                 case "pos":
                 case "position":
                     return $"{Svc.ClientState.LocalPlayer?.Position}";
@@ -85,7 +85,8 @@ namespace PostMeteion
             }
         }
 
-        public static string GetMapName( uint territoryID){
+        public static string GetMapName(uint territoryID)
+        {
             return Svc.Data.GetExcelSheet<TerritoryType>()?.GetRow(territoryID)?.PlaceName?.Value?.Name.ToString() ?? "location not found";
         }
         public static LazyRow<Map>? GetMap(uint territoryID)
@@ -96,7 +97,7 @@ namespace PostMeteion
         {
             // pos/tilescale + ((2048/(scale/100)/tilescale)/50)/2 +1
             // no accurate but enouth
-            return (float)Math.Round( pos * 41 / 2048 + 2048 / sizeFactor + 1.2, 1);
+            return (float)Math.Round(pos * 41 / 2048 + 2048 / sizeFactor + 1.2, 1);
         }
     }
 }

@@ -85,14 +85,14 @@ namespace PostMeteion
         //webhook callback
         public void WebhookStart()
         {
-            if (Webhook.IsRegistered==true) return;
+            if (Webhook.IsRegistered == true) return;
             Svc.Chat.ChatMessage += OnMessageHandler;
             Svc.PfGui.ReceiveListing += PartyFinderListingEventHandler;
             Webhook.IsRegistered = true;
         }
         public void WebhookStop()
         {
-            if (Webhook.IsRegistered==false) return;
+            if (Webhook.IsRegistered == false) return;
             Svc.Chat.ChatMessage -= OnMessageHandler;
             Svc.PfGui.ReceiveListing -= PartyFinderListingEventHandler;
             Webhook.IsRegistered = false;
@@ -100,11 +100,11 @@ namespace PostMeteion
         }
         public void OnMessageHandler(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
         {
-            if (Webhook.IsConnected) _=Webhook.PostA($"{type}|{sender}|{message}|{(from p in message.Payloads select p.ToString()).ToArray()}","/chat");
+            if (Webhook.IsConnected) _ = Webhook.PostA($"{type}|{sender}|{message}|{(from p in message.Payloads select p.ToString()).ToArray()}", "/chat");
         }
         public void PartyFinderListingEventHandler(PartyFinderListing listing, PartyFinderListingEventArgs args)
         {
-            if (Webhook.IsConnected) _=Webhook.PostA($"{listing.Id}|{listing.Name}@{listing.HomeWorld.Value.Name}|{listing.CurrentWorld.Value.Name}|{listing.Duty.Value.Name}|{listing.SecondsRemaining/60:D}|{listing.Description}", "/partyfinder");
+            if (Webhook.IsConnected) _ = Webhook.PostA($"{listing.Id}|{listing.Name}@{listing.HomeWorld.Value.Name}|{listing.CurrentWorld.Value.Name}|{listing.Duty.Value.Name}|{listing.SecondsRemaining / 60:D}|{listing.Description}", "/partyfinder");
         }
         //httpserver
         public void ServerStart(int port)
@@ -122,9 +122,9 @@ namespace PostMeteion
         }
         public void ServerStop()
         {
-            if(this.httpServer != null)
+            if (this.httpServer != null)
             {
-                if(httpServer.IsRunning == true) this.httpServer.Stop();
+                if (httpServer.IsRunning == true) this.httpServer.Stop();
                 this.httpServer.PostMeteionDelegate = null;
                 this.httpServer.OnException -= OnException;
             }
@@ -177,7 +177,7 @@ namespace PostMeteion
         }
         public string DoTextCommand(string command)
         {
-            
+
             if (command.StartsWith("/") & command.Length >= 2 & command.Length < 400)
             {
                 //bool res;
@@ -197,7 +197,7 @@ namespace PostMeteion
         {
             lock (LockChat)
             {
-                PluginLog.Information("ExecutedTextCommand:"+command);
+                PluginLog.Information("ExecutedTextCommand:" + command);
                 this.Common.Functions.Chat.SendMessage(command);
             }
         }

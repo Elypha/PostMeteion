@@ -56,10 +56,11 @@ namespace PostMeteion
         }
         public string DoWaymarks(string waymarksStr)
         {
-            if (waymarksStr == "") {
+            if (waymarksStr == "")
+            {
                 var errorMsg = "WayMarkError:EmptyCommand";
                 PluginLog.Debug(errorMsg);
-                return errorMsg; 
+                return errorMsg;
             }
             if (MarkingController == IntPtr.Zero)
             {
@@ -86,12 +87,13 @@ namespace PostMeteion
                     return ExportTempWaymark();
                 default:
                     WayMarks? waymarks = JsonConvert.DeserializeObject<WayMarks>(waymarksStr);
-                    PluginLog.Debug(waymarksStr+"\n"+ JsonConvert.SerializeObject(waymarks));
-                    if(waymarks is not null)
+                    PluginLog.Debug(waymarksStr + "\n" + JsonConvert.SerializeObject(waymarks));
+                    if (waymarks is not null)
                     {
                         WriteWaymarks(waymarks);
                         return "Placed";
-                    }else
+                    }
+                    else
                     {
                         return "PlzCheckPayload";
                     }
@@ -100,7 +102,7 @@ namespace PostMeteion
 
         public WayMarks ReadWaymarks()
         {
-            WayMarks temp= new WayMarks();
+            WayMarks temp = new WayMarks();
 
             Waymark ReadWaymark(IntPtr addr, WaymarkID id) => new()
             {
@@ -175,14 +177,14 @@ namespace PostMeteion
 
             var markAddr = wId switch
             {
-                (int)WaymarkID.A     => Waymarks + 0x00,
-                (int)WaymarkID.B     => Waymarks + 0x20,
-                (int)WaymarkID.C     => Waymarks + 0x40,
-                (int)WaymarkID.D     => Waymarks + 0x60,
-                (int)WaymarkID.One   => Waymarks + 0x80,
-                (int)WaymarkID.Two   => Waymarks + 0xA0,
+                (int)WaymarkID.A => Waymarks + 0x00,
+                (int)WaymarkID.B => Waymarks + 0x20,
+                (int)WaymarkID.C => Waymarks + 0x40,
+                (int)WaymarkID.D => Waymarks + 0x60,
+                (int)WaymarkID.One => Waymarks + 0x80,
+                (int)WaymarkID.Two => Waymarks + 0xA0,
                 (int)WaymarkID.Three => Waymarks + 0xC0,
-                (int)WaymarkID.Four  => Waymarks + 0xE0,
+                (int)WaymarkID.Four => Waymarks + 0xE0,
                 _ => IntPtr.Zero
             };
             if (markAddr == IntPtr.Zero)
@@ -200,7 +202,7 @@ namespace PostMeteion
             MemoryHelper.Write(markAddr + 0x18, (int)(waymark.Z * 1000));
             //
             //// Write the active state
-            MemoryHelper.Write(markAddr + 0x1C, (byte)(waymark.Active ? 1 : 0),false);
+            MemoryHelper.Write(markAddr + 0x1C, (byte)(waymark.Active ? 1 : 0), false);
         }
 
     }
