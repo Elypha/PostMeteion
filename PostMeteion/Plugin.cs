@@ -38,6 +38,30 @@ namespace PostMeteion
 
         public delegate string HandlerDelegate(string command);
         private Dictionary<string, HandlerDelegate> CmdBind = new(StringComparer.OrdinalIgnoreCase);
+        public class PartyFinderEntry
+        {
+            public uint? ID { get; set; }
+            public string? CurrentWorld { get; set; }
+            public string? Category { get; set; }
+            public string? DutyType { get; set; }
+            public string? Duty { get; set; }
+            public string? Description { get; set; }
+            public ushort? SecondsRemaining { get; set; }
+            public PartyFinderEntryHost? Host { get; set; }
+        }
+        public class PartyFinderEntryHost
+        {
+            public uint? ContentIdLower { get; set; }
+            public string? Name { get; set; }
+            public string? HomeWorld { get; set; }
+        }
+        public class ChatMessageEntry
+        {
+            public string? Type { get; set; }
+            public uint? SenderId { get; set; }
+            public string? Sender { get; set; }
+            public string? Message { get; set; }
+        }
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface)
@@ -100,11 +124,42 @@ namespace PostMeteion
         }
         public void OnMessageHandler(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
         {
-            if (Webhook.IsConnected) _ = Webhook.PostA($"{type}|{sender}|{message}|{(from p in message.Payloads select p.ToString()).ToArray()}", "/chat");
+            if (Webhook.IsConnected)
+            {
+                ChatMessageEntry entry = new ChatMessageEntry
+                {
+                    Type = type.ToString(),
+                    SenderId = senderId,
+                    Sender = sender.TextValue,
+                    Message = message.TextValue,
+                };
+                string resp = JsonConvert.SerializeObject(entry, Formatting.Indented);
+                _ = Webhook.PostA(resp, "/chat");
+            }
         }
         public void PartyFinderListingEventHandler(PartyFinderListing listing, PartyFinderListingEventArgs args)
         {
-            if (Webhook.IsConnected) _ = Webhook.PostA($"{listing.Id}|{listing.Name}@{listing.HomeWorld.Value.Name}|{listing.CurrentWorld.Value.Name}|{listing.Duty.Value.Name}|{listing.SecondsRemaining / 60:D}|{listing.Description}", "/partyfinder");
+            if (Webhook.IsConnected)
+            {
+                PartyFinderEntry entry = new PartyFinderEntry
+                {
+                    ID = listing.Id,
+                    CurrentWorld = listing.CurrentWorld.Value.Name,
+                    Category = listing.Category.ToString(),
+                    DutyType = listing.DutyType.ToString(),
+                    Duty = listing.Duty.Value.Name,
+                    Description = listing.Description.TextValue,
+                    SecondsRemaining = listing.SecondsRemaining,
+                    Host = new PartyFinderEntryHost
+                    {
+                        ContentIdLower = listing.ContentIdLower,
+                        Name = listing.Name.TextValue,
+                        HomeWorld = listing.HomeWorld.Value.Name,
+                    }
+                };
+                string resp = JsonConvert.SerializeObject(entry);
+                _ = Webhook.PostA(resp, "/partyfinder");
+            }
         }
         //httpserver
         public void ServerStart(int port)
