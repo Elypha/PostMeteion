@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -18,12 +18,12 @@
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-	  <OutputPath>$(appdata)\XIVLauncherCN\Roaming\devPlugins\PostMeteion\</OutputPath>
+	  <OutputPath>E:\repos\PostMeteion\Build\</OutputPath>
   </PropertyGroup>
 
 
   <PropertyGroup>
-    <DalamudLibPath>$(appdata)\XIVLauncherCN\Roaming\addon\Hooks\dev\</DalamudLibPath>
+    <DalamudLibPath>D:\apps\XIVLauncherCN\Roaming\addon\Hooks\dev\</DalamudLibPath>
   </PropertyGroup>
 
 
