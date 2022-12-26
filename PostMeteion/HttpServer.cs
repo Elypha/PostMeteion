@@ -94,16 +94,23 @@ namespace PostMeteion
         }
         private void DoAction(ref HttpListenerContext context)
         {
-            var payload = new StreamReader(context.Request.InputStream, Encoding.UTF8).ReadToEnd();
+            try
+            {
+                var payload = new StreamReader(context.Request.InputStream, Encoding.UTF8).ReadToEnd();
 
-            var res = PostMeteionDelegate?.Invoke(TrimUrl(context.Request.Url.AbsolutePath), payload);
+                var res = PostMeteionDelegate?.Invoke(TrimUrl(context.Request.Url.AbsolutePath), payload);
 
-            var buf = Encoding.UTF8.GetBytes(res);
-            context.Response.ContentLength64 = buf.Length;
-            context.Response.OutputStream.Write(buf, 0, buf.Length);
+                var buf = Encoding.UTF8.GetBytes(res);
+                context.Response.ContentLength64 = buf.Length;
+                context.Response.OutputStream.Write(buf, 0, buf.Length);
 
-            context.Response.StatusCode = (int)HttpStatusCode.OK;
-            context.Response.OutputStream.Flush();
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                context.Response.OutputStream.Flush();
+            }
+            catch (Exception ex)
+            {
+                PluginLog.Error($"DoAction Error, HttpServer.cs:95\n{ex.Message}");
+            }
         }
         public string TrimUrl(string url)
         {
